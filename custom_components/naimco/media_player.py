@@ -128,52 +128,64 @@ class NaimcoMediaPlayer(NaimcoEntity, MediaPlayerEntity):
     async def async_turn_on(self) -> None:
         await self._async_ensure_connected()
         await self._device.on()
+        await self._async_refresh()
 
     async def async_turn_off(self) -> None:
         await self._async_ensure_connected()
         await self._device.off()
+        await self._async_refresh()
 
     async def async_set_volume_level(self, volume: float) -> None:
         await self._async_ensure_connected()
         await self._device.set_volume(round(volume * 100))
+        await self._async_refresh()
 
     async def async_volume_up(self) -> None:
         await self._async_ensure_connected()
         await self._device.volume_up()
+        await self._async_refresh()
 
     async def async_volume_down(self) -> None:
         await self._async_ensure_connected()
         await self._device.volume_down()
+        await self._async_refresh()
 
     async def async_mute_volume(self, mute: bool) -> None:
         await self._async_ensure_connected()
         await self._device.mute(mute)
+        await self._async_refresh()
 
     async def async_media_play(self) -> None:
         await self._async_ensure_connected()
         await self._device.play()
+        await self._async_refresh()
 
     async def async_media_pause(self) -> None:
         await self._async_ensure_connected()
         await self._device.pause()
+        await self._async_refresh()
 
     async def async_media_stop(self) -> None:
         await self._async_ensure_connected()
         await self._device.stop()
+        await self._async_refresh()
 
     async def async_media_next_track(self) -> None:
         await self._async_ensure_connected()
         await self._device.nexttrack()
+        await self._async_refresh()
 
     async def async_media_previous_track(self) -> None:
         await self._async_ensure_connected()
         await self._device.prevtrack()
+        await self._async_refresh()
 
     async def async_select_source(self, source: str) -> None:
         for input_id, name in self._device.inputs.items():
             if name == source:
                 await self._async_ensure_connected()
                 await self._device.select_input(input_id)
+                await self._async_refresh()
                 return
         _LOGGER.warning("Unknown source %s", source)
 
@@ -184,5 +196,6 @@ class NaimcoMediaPlayer(NaimcoEntity, MediaPlayerEntity):
         if media_type == "preset":
             await self._async_ensure_connected()
             await self._device.select_preset(int(media_id))
+            await self._async_refresh()
         else:
             _LOGGER.warning("Unsupported media type %s", media_type)

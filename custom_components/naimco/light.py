@@ -61,7 +61,9 @@ class NaimcoIllumination(NaimcoEntity, LightEntity):
         else:
             level = self._device.state.illum or ILLUM_MAX
         await self._device.set_illum(level)
+        self.async_write_ha_state()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         await self._async_ensure_connected()
         await self._device.set_illum(0)
+        self.async_write_ha_state()

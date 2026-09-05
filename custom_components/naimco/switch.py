@@ -44,7 +44,14 @@ class NaimcoCleaningMode(NaimcoEntity, SwitchEntity):
     async def async_turn_on(self, **kwargs: Any) -> None:
         await self._async_ensure_connected()
         await self._device.set_cleaningmode(True)
+        # naimco has no reply handler or query command for cleaning mode, so
+        # there's no way to confirm the device's actual state - assume the
+        # command succeeded.
+        self._device.state.cleaningmode = True
+        self.async_write_ha_state()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         await self._async_ensure_connected()
         await self._device.set_cleaningmode(False)
+        self._device.state.cleaningmode = False
+        self.async_write_ha_state()

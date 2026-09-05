@@ -41,6 +41,17 @@ class NaimcoEntity(Entity):
             )
         )
 
+    async def _async_refresh(self) -> None:
+        """Force a state re-read from the device and push it to Home Assistant.
+
+        Several naimco commands (play/pause/stop/next/prev among others)
+        have no reply handler that updates any tracked state field, so the
+        entity would otherwise never learn whether/how anything changed.
+        Call this after issuing a command that isn't already self-refreshing.
+        """
+        await self._device.update_data()
+        self.async_write_ha_state()
+
     async def _async_ensure_connected(self) -> None:
         """Wait out a background reconnect before sending a command.
 
