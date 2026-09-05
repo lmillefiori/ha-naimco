@@ -126,41 +126,53 @@ class NaimcoMediaPlayer(NaimcoEntity, MediaPlayerEntity):
         return {"presets": self._device.presets}
 
     async def async_turn_on(self) -> None:
+        await self._async_ensure_connected()
         await self._device.on()
 
     async def async_turn_off(self) -> None:
+        await self._async_ensure_connected()
         await self._device.off()
 
     async def async_set_volume_level(self, volume: float) -> None:
+        await self._async_ensure_connected()
         await self._device.set_volume(round(volume * 100))
 
     async def async_volume_up(self) -> None:
+        await self._async_ensure_connected()
         await self._device.volume_up()
 
     async def async_volume_down(self) -> None:
+        await self._async_ensure_connected()
         await self._device.volume_down()
 
     async def async_mute_volume(self, mute: bool) -> None:
+        await self._async_ensure_connected()
         await self._device.mute(mute)
 
     async def async_media_play(self) -> None:
+        await self._async_ensure_connected()
         await self._device.play()
 
     async def async_media_pause(self) -> None:
+        await self._async_ensure_connected()
         await self._device.pause()
 
     async def async_media_stop(self) -> None:
+        await self._async_ensure_connected()
         await self._device.stop()
 
     async def async_media_next_track(self) -> None:
+        await self._async_ensure_connected()
         await self._device.nexttrack()
 
     async def async_media_previous_track(self) -> None:
+        await self._async_ensure_connected()
         await self._device.prevtrack()
 
     async def async_select_source(self, source: str) -> None:
         for input_id, name in self._device.inputs.items():
             if name == source:
+                await self._async_ensure_connected()
                 await self._device.select_input(input_id)
                 return
         _LOGGER.warning("Unknown source %s", source)
@@ -170,6 +182,7 @@ class NaimcoMediaPlayer(NaimcoEntity, MediaPlayerEntity):
     ) -> None:
         """Select a radio preset via media_type='preset', media_id='<preset number>'."""
         if media_type == "preset":
+            await self._async_ensure_connected()
             await self._device.select_preset(int(media_id))
         else:
             _LOGGER.warning("Unsupported media type %s", media_type)

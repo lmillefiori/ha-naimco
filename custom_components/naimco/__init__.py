@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import logging
 
 from naimco import NaimCo
@@ -13,25 +12,10 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
-from .const import CONNECT_TIMEOUT, DOMAIN, PLATFORMS, SIGNAL_UPDATE
+from .const import DOMAIN, PLATFORMS, SIGNAL_UPDATE
+from .util import wait_for_connection
 
 _LOGGER = logging.getLogger(__name__)
-
-
-async def _wait_for_connection(device: NaimCo, timeout: float = CONNECT_TIMEOUT) -> None:
-    """Wait until device.startup() has established a connection.
-
-    naimco's startup() only schedules a background connection task and
-    returns immediately, so device.controller stays None for a moment.
-    Callers must wait for it before issuing any commands.
-    """
-    elapsed = 0.0
-    interval = 0.2
-    while device.controller is None or device.controller.connection is None:
-        if elapsed >= timeout:
-            raise TimeoutError(f"Timed out connecting to {device.ip_address}")
-        await asyncio.sleep(interval)
-        elapsed += interval
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -45,7 +29,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     try:
         await device.startup()
-        await _wait_for_connection(device)
+        await wait_for_connection(device)
     except (TimeoutError, OSError, ValueError) as err:
         raise ConfigEntryNotReady(f"Unable to connect to Mu-so at {host}") from err
 

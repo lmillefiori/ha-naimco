@@ -18,8 +18,8 @@ from homeassistant.helpers.service_info.ssdp import (
     SsdpServiceInfo,
 )
 
-from . import _wait_for_connection
 from .const import DOMAIN
+from .util import wait_for_connection
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ async def _async_probe_device(host: str) -> dict[str, Any]:
     device = NaimCo(host)
     try:
         await device.startup()
-        await _wait_for_connection(device, timeout=5)
+        await wait_for_connection(device, timeout=5)
         await device.update_data()
         # Give the initial NVM queries (roomname, serial number, ...) a moment
         # to come back before reading them.

@@ -54,6 +54,7 @@ class NaimcoIllumination(NaimcoEntity, LightEntity):
         return round(illum / ILLUM_MAX * 255)
 
     async def async_turn_on(self, **kwargs: Any) -> None:
+        await self._async_ensure_connected()
         if ATTR_BRIGHTNESS in kwargs:
             level = round(kwargs[ATTR_BRIGHTNESS] / 255 * ILLUM_MAX)
             level = max(1, level)
@@ -62,4 +63,5 @@ class NaimcoIllumination(NaimcoEntity, LightEntity):
         await self._device.set_illum(level)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
+        await self._async_ensure_connected()
         await self._device.set_illum(0)

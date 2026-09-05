@@ -9,6 +9,7 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity import Entity
 
 from .const import DOMAIN, MANUFACTURER, SIGNAL_UPDATE
+from .util import async_ensure_connected
 
 
 class NaimcoEntity(Entity):
@@ -39,3 +40,14 @@ class NaimcoEntity(Entity):
                 self.async_write_ha_state,
             )
         )
+
+    async def _async_ensure_connected(self) -> None:
+        """Wait out a background reconnect before sending a command.
+
+        The naimco connection can drop and reconnect at any time (e.g. the
+        Mu-so closing its socket when it goes into standby), which briefly
+        leaves device.controller as None. Command methods must call this
+        first or they'll hit AttributeError: 'NoneType' object has no
+        attribute 'nvm'.
+        """
+        await async_ensure_connected(self._device)
