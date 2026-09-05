@@ -12,6 +12,13 @@ PLATFORMS: list[Platform] = [Platform.MEDIA_PLAYER, Platform.LIGHT, Platform.SWI
 # giving up.
 CONNECT_TIMEOUT = 10
 
+# Passed to naimco as the heartbeat interval: it tells the Mu-so how long it
+# may go without hearing from us, and starts a background task that pings
+# just before that deadline. Without this, the unit closes the TCP
+# connection on its own after roughly 20-30 seconds of inactivity, causing
+# frequent reconnects (observed via repeated "EOF on reader" disconnects).
+HEARTBEAT_INTERVAL = 20
+
 SIGNAL_UPDATE = f"{DOMAIN}_update_{{entry_id}}"
 
 MANUFACTURER = "Naim Audio Ltd."

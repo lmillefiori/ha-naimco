@@ -12,7 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
-from .const import DOMAIN, PLATFORMS, SIGNAL_UPDATE
+from .const import DOMAIN, HEARTBEAT_INTERVAL, PLATFORMS, SIGNAL_UPDATE
 from .util import wait_for_connection
 
 _LOGGER = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     device = NaimCo(host, callback=_on_state_update)
 
     try:
-        await device.startup()
+        await device.startup(timeout=HEARTBEAT_INTERVAL)
         await wait_for_connection(device)
     except (TimeoutError, OSError, ValueError) as err:
         raise ConfigEntryNotReady(f"Unable to connect to Mu-so at {host}") from err

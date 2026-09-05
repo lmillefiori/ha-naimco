@@ -22,8 +22,21 @@ from .entity import NaimcoEntity
 _LOGGER = logging.getLogger(__name__)
 
 _VIEWSTATE_PLAYING = {"PLAYING"}
-_VIEWSTATE_PAUSED = {"PLAYERPAUSED", "PAUSED"}
 _VIEWSTATE_STOPPED = {"PLAYERSTOPPED", "STOPPED"}
+
+# now_playing["state"] (from the XML GetNowPlaying reply) is the reliable
+# transport-state signal - confirmed against a real device as lowercase
+# "play"/"pause". GETVIEWSTATE's own "state" field does NOT reflect pause for
+# streaming sources (it stays "PLAYING" throughout - GETVIEWSTATE's *phase*
+# field or GETBRIEFNP's "state" carry that instead, e.g.
+# "#NVM GETVIEWSTATE PLAYING PAUSE ..." while paused), so don't use it for
+# this - it's only used below as a fallback for sources with no now_playing
+# data at all.
+_NOW_PLAYING_STATE_MAP = {
+    "play": MediaPlayerState.PLAYING,
+    "pause": MediaPlayerState.PAUSED,
+    "stop": MediaPlayerState.IDLE,
+}
 
 _FEATURES = (
     MediaPlayerEntityFeature.TURN_ON
@@ -66,12 +79,15 @@ class NaimcoMediaPlayer(NaimcoEntity, MediaPlayerEntity):
         if standby and standby.get("state") == "ON":
             return MediaPlayerState.OFF
 
+        now_playing = self._device.state.now_playing
+        if now_playing and (np_state := now_playing.get("state")):
+            if mapped := _NOW_PLAYING_STATE_MAP.get(np_state.lower()):
+                return mapped
+
         viewstate = self._device.viewstate
         view_state = viewstate.get("state") if viewstate else None
         if view_state in _VIEWSTATE_PLAYING:
             return MediaPlayerState.PLAYING
-        if view_state in _VIEWSTATE_PAUSED:
-            return MediaPlayerState.PAUSED
         if view_state in _VIEWSTATE_STOPPED:
             return MediaPlayerState.IDLE
         return MediaPlayerState.ON
