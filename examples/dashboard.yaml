@@ -1,0 +1,131 @@
+# Example Lovelace dashboard for the Naim Mu-so integration.
+#
+# Usage: Settings > Dashboards > Add Dashboard > New dashboard from scratch,
+# then open it, "Edit Dashboard" (pencil, top right) > "..." > "Edit in YAML",
+# and paste this in.
+#
+# Before pasting, replace the three entity IDs below with your own - find
+# them under Settings > Devices & services > Naim Mu-so > your device:
+#   media_player.naim_muso                  -> your media_player entity
+#   light.naim_muso_illumination            -> your illumination light entity
+#   switch.naim_muso_cleaning_mode          -> your cleaning mode switch entity
+#
+# The illumination light and cleaning mode switch are disabled by default
+# (see the README's "Entities" section) - enable them first from the
+# device's entity list if you want them on the dashboard, or delete those
+# two cards below if you'd rather not use them.
+#
+# The &naim_player / *naim_player pair is a YAML anchor: it lets every
+# preset button below reuse the same entity ID without repeating it, so you
+# only have to edit the media_player line once.
+
+title: Mu-so
+views:
+  - title: Mu-so
+    path: mu-so
+    icon: mdi:speaker-wireless
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: media-control
+            entity: &naim_player media_player.naim_muso
+
+          - type: tile
+            entity: *naim_player
+            name: Volume
+            features:
+              - type: media-player-volume-slider
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: light.naim_muso_illumination
+                name: Illumination
+                features:
+                  - type: light-brightness
+              - type: tile
+                entity: switch.naim_muso_cleaning_mode
+                name: Cleaning mode
+
+          - type: markdown
+            content: "## Presets"
+
+          # One row of preset buttons. Duplicate/renumber for any presets
+          # beyond 6 - check the media_player's "presets" attribute in
+          # Developer Tools > States to see which numbers are configured.
+          - type: horizontal-stack
+            cards:
+              - type: button
+                name: Preset 1
+                icon: mdi:numeric-1-circle
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: media_player.play_media
+                  target:
+                    entity_id: *naim_player
+                  data:
+                    media_content_type: preset
+                    media_content_id: "1"
+              - type: button
+                name: Preset 2
+                icon: mdi:numeric-2-circle
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: media_player.play_media
+                  target:
+                    entity_id: *naim_player
+                  data:
+                    media_content_type: preset
+                    media_content_id: "2"
+              - type: button
+                name: Preset 3
+                icon: mdi:numeric-3-circle
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: media_player.play_media
+                  target:
+                    entity_id: *naim_player
+                  data:
+                    media_content_type: preset
+                    media_content_id: "3"
+              - type: button
+                name: Preset 4
+                icon: mdi:numeric-4-circle
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: media_player.play_media
+                  target:
+                    entity_id: *naim_player
+                  data:
+                    media_content_type: preset
+                    media_content_id: "4"
+              - type: button
+                name: Preset 5
+                icon: mdi:numeric-5-circle
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: media_player.play_media
+                  target:
+                    entity_id: *naim_player
+                  data:
+                    media_content_type: preset
+                    media_content_id: "5"
+              - type: button
+                name: Preset 6
+                icon: mdi:numeric-6-circle
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: media_player.play_media
+                  target:
+                    entity_id: *naim_player
+                  data:
+                    media_content_type: preset
+                    media_content_id: "6"

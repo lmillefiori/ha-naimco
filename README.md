@@ -37,6 +37,13 @@ Settings → Devices & Services → Add Integration → "Naim Mu-so". Units on t
 network are auto-discovered via SSDP and will show up as a discovered device; you can
 also add one manually by IP address.
 
+## Example dashboard
+
+[`examples/dashboard.yaml`](examples/dashboard.yaml) has a full Lovelace dashboard:
+media controls, a volume slider, illumination brightness, cleaning mode, and one-tap
+buttons for six radio presets. Swap in your own entity IDs (noted at the top of the
+file) and paste it into a new dashboard's YAML editor.
+
 ## Known limitations
 
 - Only tested against a single Mu-so unit; multi-room setups are untested.
