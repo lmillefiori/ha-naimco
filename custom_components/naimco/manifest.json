@@ -4,9 +4,9 @@
   "codeowners": ["@lmillefiori"],
   "config_flow": true,
   "documentation": "https://github.com/lmillefiori/ha-naimco",
-  "issue_tracker": "https://github.com/lmillefiori/ha-naimco/issues",
   "integration_type": "device",
   "iot_class": "local_push",
+  "issue_tracker": "https://github.com/lmillefiori/ha-naimco/issues",
   "requirements": ["naimco==0.4.1"],
   "ssdp": [
     {
