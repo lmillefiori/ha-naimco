@@ -46,12 +46,6 @@ also add one manually by IP address.
   engineered from the Naim app, not from official documentation, so some fields
   or states may be incomplete.
 
-## Before publishing
-
-`custom_components/naimco/manifest.json` has placeholder `codeowners`,
-`documentation`, and `issue_tracker` values — update `YOUR_GITHUB_USERNAME` once this
-repo has a home on GitHub.
-
 ## License
 
 MIT, see [LICENSE](LICENSE).
