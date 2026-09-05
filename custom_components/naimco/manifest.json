@@ -1,0 +1,18 @@
+{
+  "domain": "naimco",
+  "name": "Naim Mu-so",
+  "codeowners": ["@YOUR_GITHUB_USERNAME"],
+  "config_flow": true,
+  "documentation": "https://github.com/YOUR_GITHUB_USERNAME/ha-naimco",
+  "issue_tracker": "https://github.com/YOUR_GITHUB_USERNAME/ha-naimco/issues",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "requirements": ["naimco==0.4.1"],
+  "ssdp": [
+    {
+      "manufacturer": "Naim Audio Ltd.",
+      "deviceType": "urn:schemas-upnp-org:device:MediaRenderer:1"
+    }
+  ],
+  "version": "0.1.0"
+}

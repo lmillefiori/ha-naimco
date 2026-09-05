@@ -1,0 +1,33 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Enter the IP address of your Naim Mu-so.",
+        "data": {
+          "host": "IP address"
+        }
+      },
+      "ssdp_confirm": {
+        "description": "Do you want to add the Naim Mu-so \"{name}\" to Home Assistant?"
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the Mu-so. Check the IP address and that it is powered on and on the network."
+    },
+    "abort": {
+      "already_configured": "This Mu-so is already configured."
+    }
+  },
+  "entity": {
+    "light": {
+      "illumination": {
+        "name": "Illumination"
+      }
+    },
+    "switch": {
+      "cleaning_mode": {
+        "name": "Cleaning mode"
+      }
+    }
+  }
+}
